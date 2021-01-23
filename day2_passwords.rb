@@ -19,10 +19,27 @@
 #
 # How many passwords are valid according to their policies?
 
-class PasswordValidator
-  def self.validate(policy:, password:)
-    # this regex extracts the values from policy "1-3 a" as: minimum 1, maximum 3 and character a
-    minimum, maximum, character = /(\d*)-(\d*)\s(\w)/.match(policy).captures
+class PasswordListValidator
+  def initialize(password_list)
+    @list = password_list
+  end
+
+  def valid_password_count(policy)
+    valid_passwords = 0
+
+    # line looks like this: "4-7 h: hhxhzmwhhhh\n"
+    @list.each do |line|
+      valid_passwords += 1 if policy.validate(line)
+    end
+
+    valid_passwords
+  end
+end
+
+class LetterCountPolicy
+  def self.validate(line)
+    # this regex extracts the values from policy "1-3 a: abcde" as: minimum 1, maximum 3, character a and password abcde
+    minimum, maximum, character, password = /(\d*)-(\d*)\s(\w):\s(\w*)/.match(line).captures
     minimum = minimum.to_i
     maximum = maximum.to_i
 
@@ -31,11 +48,4 @@ class PasswordValidator
 end
 
 # official_input = File.open("day2_input.txt")
-# valid_passwords = 0
-# # line looks like this: "6-7 z: dqzzzjbzz"
-# official_input.each do |line|
-#   policy, password = /(\d*-\d*\s\w): (\w*)/.match(line).captures
-#   valid_passwords += 1 if PasswordValidator.validate(policy: policy, password: password)
-# end
-#
-# puts valid_passwords
+# puts PasswordListValidator.new(official_input).valid_password_count(LetterCountPolicy)
