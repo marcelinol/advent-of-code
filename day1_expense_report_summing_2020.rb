@@ -17,7 +17,7 @@
 class ExpenseReportPuzzle
   def self.run(input)
     input.each_with_index do |pivot, index|
-      input.slice(index..-1).each do |number|
+      input.slice((index + 1)..-1).each do |number|
         return pivot * number if pivot + number === 2020
       end
     end
