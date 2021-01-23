@@ -33,3 +33,29 @@ describe 'LetterCountPolicy' do
     end
   end
 end
+
+describe 'LetterPositionPolicy' do
+  describe '.validate' do
+    context 'when the password must contain the letter a only in the position 2 or only in the position 4' do
+      it 'password maneiro is valid' do
+        expect(LetterPositionPolicy.validate('2-4 a: maneiro')).to be
+      end
+
+      it 'password munairo is valid' do
+        expect(LetterPositionPolicy.validate('2-4 a: munairo')).to be
+      end
+
+      it 'password manairo is not valid' do
+        expect(LetterPositionPolicy.validate('2-4 a: manairo')).not_to be
+      end
+
+      it 'ignores occurrences of the letter in other positions' do
+        expect(LetterPositionPolicy.validate('2-4 a: maneira')).to be
+      end
+
+      it 'works for a short password' do
+        expect(LetterPositionPolicy.validate('2-4 a: ma')).to be
+      end
+    end
+  end
+end
