@@ -19,7 +19,9 @@ describe 'Day 3' do
 
   context 'following a slope of right 3 and down 1' do
     it 'counts 2 tree encounters' do
-      expect(TobogganTrajectoryPlanner.count_tree_encounters(MAP.split("\n"))).to eq(2)
+      planner = TobogganTrajectoryPlanner.new(steps_to_the_right: 3, steps_down: 1)
+
+      expect(planner.count_tree_encounters(trajectory_map: MAP.split("\n"))).to eq(2)
     end
   end
 end

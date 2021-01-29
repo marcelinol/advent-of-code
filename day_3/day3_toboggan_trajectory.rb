@@ -1,16 +1,27 @@
 class TobogganTrajectoryPlanner
-  STEPS_TO_THE_RIGHT = 3
-  def self.count_tree_encounters(trajectory_map)
+  def initialize(steps_to_the_right:, steps_down:)
+    @steps_to_the_right = steps_to_the_right
+    @steps_down = steps_down
+  end
+
+  def count_tree_encounters(trajectory_map:)
     trajectory_map = trajectory_map.map(&:chomp)
     current_point = trajectory_map.first.index('.')
     tree_encounters = 0
-    trajectory_map.each do |line|
-      # binding.irb
+    trajectory_map.each_with_index do |line, index|
+      next if stepping_down(index)
+
       tree_encounters += 1 if line[current_point] == '#'
-      current_point = (current_point + STEPS_TO_THE_RIGHT) % line.size
+      current_point = (current_point + @steps_to_the_right) % line.size
     end
 
     tree_encounters
+  end
+
+  private
+
+  def stepping_down(index)
+    index % @steps_down != 0
   end
 end
 
