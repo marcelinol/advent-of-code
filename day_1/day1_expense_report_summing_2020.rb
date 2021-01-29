@@ -24,6 +24,13 @@ class ExpenseReportPuzzle
 
     raise StandardError, "No numbers found in the input that sum 2020"
   end
+
+  def self.run_part_two(input)
+    input.permutation(3).to_a.select do |numbers|
+      return numbers.inject(:*) if numbers.inject(:+) == 2_020
+    end
+    raise StandardError, "No numbers found in the input that sum 2020"
+  end
 end
 
 # require 'benchmark'
