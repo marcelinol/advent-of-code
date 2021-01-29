@@ -1,18 +1,16 @@
 class TobogganTrajectoryPlanner
-  def initialize(steps_to_the_right:, steps_down:)
-    @steps_to_the_right = steps_to_the_right
-    @steps_down = steps_down
+  def initialize(trajectory_map:)
+    @trajectory_map = trajectory_map.map(&:chomp)
   end
 
-  def count_tree_encounters(trajectory_map:)
-    trajectory_map = trajectory_map.map(&:chomp)
-    current_point = trajectory_map.first.index('.')
+  def count_tree_encounters(steps_to_the_right:, steps_down:)
+    current_point = @trajectory_map.first.index('.')
     tree_encounters = 0
-    trajectory_map.each_with_index do |line, index|
-      next if stepping_down(index)
+    @trajectory_map.each_with_index do |line, index|
+      next if stepping_down(index, steps_down)
 
       tree_encounters += 1 if line[current_point] == '#'
-      current_point = (current_point + @steps_to_the_right) % line.size
+      current_point = (current_point + steps_to_the_right) % line.size
     end
 
     tree_encounters
@@ -20,14 +18,22 @@ class TobogganTrajectoryPlanner
 
   private
 
-  def stepping_down(index)
-    index % @steps_down != 0
+  def stepping_down(index, steps_down)
+    index % steps_down != 0
   end
 end
 
+# RIGHT = 0
+# DOWN = 1
+# movements = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
+#
 # official_input = File.open("day_3/day3_input.txt")
-# puts TobogganTrajectoryPlanner.count_tree_encounters(official_input)
-
+# planner = TobogganTrajectoryPlanner.new(trajectory_map: official_input)
+# tree_encounters = []
+# movements.each do |plan|
+#   tree_encounters << planner.count_tree_encounters(steps_to_the_right: plan[RIGHT], steps_down: plan[DOWN])
+# end
+# puts tree_encounters.inject(:*)
 
 
 # --- Day 3: Toboggan Trajectory ---
@@ -81,3 +87,18 @@ end
 # In this example, traversing the map using this slope would cause you to encounter 7 trees.
 #
 # Starting at the top-left corner of your map and following a slope of right 3 and down 1, how many trees would you encounter?
+#
+#
+# --- Part Two ---
+# Time to check the rest of the slopes - you need to minimize the probability of a sudden arboreal stop, after all.
+#
+# Determine the number of trees you would encounter if, for each of the following slopes, you start at the top-left corner and traverse the map all the way to the bottom:
+#
+# Right 1, down 1.
+# Right 3, down 1. (This is the slope you already checked.)
+# Right 5, down 1.
+# Right 7, down 1.
+# Right 1, down 2.
+# In the above example, these slopes would find 2, 7, 3, 4, and 2 tree(s) respectively; multiplied together, these produce the answer 336.
+#
+# What do you get if you multiply together the number of trees encountered on each of the listed slopes?
