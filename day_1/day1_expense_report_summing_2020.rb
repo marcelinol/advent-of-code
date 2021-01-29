@@ -34,8 +34,8 @@ class ExpenseReportPuzzle
 end
 
 # require 'benchmark'
-# # This report shows the user CPU time, system CPU time, the sum of the user and system CPU times, and the elapsed real time. The unit of time is seconds.
-# official_input = File.open("day1_input.txt").map(&:to_i);false
-# puts Benchmark.measure { ExpenseReportPuzzle.run(official_input) }
-#
-# puts ExpenseReportPuzzle.run(official_input)
+# This report shows the user CPU time, system CPU time, the sum of the user and system CPU times, and the elapsed real time. The unit of time is seconds.
+# official_input = File.open("day_1/day1_input.txt").map(&:to_i);false
+# puts Benchmark.measure { ExpenseReportPuzzle.run_part_two(official_input) }
+
+# puts ExpenseReportPuzzle.run_part_two(official_input)
