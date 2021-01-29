@@ -1,5 +1,5 @@
 require 'rspec'
-require './day2_passwords.rb'
+require_relative 'day2_passwords'
 
 class DummyPolicy
   def self.validate(value)

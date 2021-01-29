@@ -1,5 +1,5 @@
 require 'rspec'
-require './day1_expense_report_summing_2020.rb'
+require_relative 'day1_expense_report_summing_2020'
 
 describe 'find values that sum 2020' do
   context 'with two values in the list' do
