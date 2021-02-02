@@ -1,3 +1,5 @@
+require 'dry-struct'
+
 class InputParser
   def self.parse(input)
     parsed = []
@@ -35,13 +37,37 @@ class InputParser
   end
 end
 
+module Types
+  include Dry.Types()
+end
 
-# eyr:2029 iyr:2013
-# hcl:#ceb3a1 byr:1939 ecl:blu
-#   hgt:163cm
-# pid:660456119
+class Passport < Dry::Struct::Value
+  attribute :eyr, Types::String # Expiration Year
+  attribute :iyr, Types::String # Issue Year
+  attribute :hcl, Types::String # Hair Color
+  attribute :byr, Types::String # Birth Year
+  attribute :ecl, Types::String # Eye Color
+  attribute :hgt, Types::String # Height
+  attribute :pid, Types::String # Passport ID
+  attribute? :cid, Types::String # Country ID
+end
 
+class PassportValidator
+  def self.validate(passport_data)
+    Passport.new(passport_data)
 
+    true
+  rescue Dry::Struct::Error
+    false
+  end
+end
+
+official_input = File.open("day_4/day4_input.txt")
+valid_passports = 0
+InputParser.parse(official_input).each do |passport_data|
+  valid_passports += 1 if PassportValidator.validate(passport_data)
+end
+puts valid_passports
 
 # --- Day 4: Passport Processing ---
 # You arrive at the airport only to realize that you grabbed your North Pole Credentials instead of your passport. While these documents are extremely similar, North Pole Credentials aren't issued by a country and therefore aren't actually valid documentation for travel in most of the world.
