@@ -1,4 +1,4 @@
-require 'dry-struct'
+require 'dry-validation'
 
 class InputParser
   def self.parse(input)
@@ -37,28 +37,23 @@ class InputParser
   end
 end
 
-module Types
-  include Dry.Types()
-end
 
-class Passport < Dry::Struct::Value
-  attribute :eyr, Types::String # Expiration Year
-  attribute :iyr, Types::String # Issue Year
-  attribute :hcl, Types::String # Hair Color
-  attribute :byr, Types::String # Birth Year
-  attribute :ecl, Types::String # Eye Color
-  attribute :hgt, Types::String # Height
-  attribute :pid, Types::String # Passport ID
-  attribute? :cid, Types::String # Country ID
+class Passport < Dry::Validation::Contract
+  schema do
+    required(:eyr).filled(:string) # Expiration Year
+    required(:iyr).filled(:string) # Issue Year
+    required(:hcl).filled(:string) # Hair Color
+    required(:byr).filled(:string) # Birth Year
+    required(:ecl).filled(:string) # Eye Color
+    required(:hgt).filled(:string) # Height
+    required(:pid).filled(:string) # Passport ID
+    optional(:cid).filled(:string) # Country ID
+  end
 end
 
 class PassportValidator
   def self.validate(passport_data)
-    Passport.new(passport_data)
-
-    true
-  rescue Dry::Struct::Error
-    false
+    Passport.new.call(passport_data).success?
   end
 end
 
