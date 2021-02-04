@@ -4,3 +4,4 @@ ruby '2.6.6'
 
 gem 'rspec'
 gem 'dry-validation'
+gem 'pry'

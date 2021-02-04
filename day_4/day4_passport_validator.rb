@@ -37,9 +37,8 @@ class InputParser
   end
 end
 
-
 class Passport < Dry::Validation::Contract
-  schema do
+  params do
     required(:eyr).filled(:string) # Expiration Year
     required(:iyr).filled(:string) # Issue Year
     required(:hcl).filled(:string) # Hair Color
@@ -47,7 +46,43 @@ class Passport < Dry::Validation::Contract
     required(:ecl).filled(:string) # Eye Color
     required(:hgt).filled(:string) # Height
     required(:pid).filled(:string) # Passport ID
-    optional(:cid).filled(:string) # Country ID
+    optional(:cid).value(:string) # Country ID
+  end
+
+  rule(:byr) do
+    key.failure('must have four digits') unless value.size == 4
+    key.failure('must be between 1920 and 2002') unless value.to_i.between?(1920, 2002)
+  end
+
+  rule(:iyr) do
+    key.failure('must have four digits') unless value.size == 4
+    key.failure('must be between 2010 and 2020') unless value.to_i.between?(2010, 2020)
+  end
+
+  rule(:eyr) do
+    key.failure('must have four digits') unless value.size == 4
+    key.failure('must be between 2020 and 2030') unless value.to_i.between?(2020, 2030)
+  end
+
+  rule(:hgt) do
+    key.failure('must be an integer followed by either cm or in') unless value.match(/^\d*(cm|in)$/)
+    if value.match(/cm/)
+      key.failure('must be between 150 and 193 cm') unless value[/\d*/].to_i.between?(150, 193)
+    else
+      key.failure('must be between 59 and 76 in') unless value[/\d*/].to_i.between?(59, 76)
+    end
+  end
+
+  rule(:hcl) do
+    key.failure('must be a # followed by exactly six characters 0-9 or a-f') unless value.match(/^#([0-9]|[a-f]){6}$/)
+  end
+
+  rule(:pid) do
+    key.failure('must be a nine-digit number, including leading zeroes') unless value.size == 9
+  end
+
+  rule(:ecl) do
+    key.failure('must be one of: amb blu brn gry grn hzl oth') unless %w[amb blu brn gry grn hzl oth].include?(value)
   end
 end
 
@@ -62,7 +97,7 @@ valid_passports = 0
 InputParser.parse(official_input).each do |passport_data|
   valid_passports += 1 if PassportValidator.validate(passport_data)
 end
-puts valid_passports
+puts "valid passports: #{valid_passports}"
 
 # --- Day 4: Passport Processing ---
 # You arrive at the airport only to realize that you grabbed your North Pole Credentials instead of your passport. While these documents are extremely similar, North Pole Credentials aren't issued by a country and therefore aren't actually valid documentation for travel in most of the world.
