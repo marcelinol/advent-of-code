@@ -13,7 +13,6 @@ describe 'Day 5', :aggregate_failures do
     it 'gets column from seat code' do
       expect(Seat.new('FBFBBFFRLR').column).to eq(5)
       expect(Seat.new('BFFFBBFRRR').column).to eq(7)
-      expect(Seat.new('FFFBBBFRRR').column).to eq(7)
       expect(Seat.new('BBFFBBFRLL').column).to eq(4)
     end
 
