@@ -92,12 +92,12 @@ class PassportValidator
   end
 end
 
-official_input = File.open("day_4/day4_input.txt")
-valid_passports = 0
-InputParser.parse(official_input).each do |passport_data|
-  valid_passports += 1 if PassportValidator.validate(passport_data)
-end
-puts "valid passports: #{valid_passports}"
+# official_input = File.open("day_4/day4_input.txt")
+# valid_passports = 0
+# InputParser.parse(official_input).each do |passport_data|
+#   valid_passports += 1 if PassportValidator.validate(passport_data)
+# end
+# puts "valid passports: #{valid_passports}"
 
 # --- Day 4: Passport Processing ---
 # You arrive at the airport only to realize that you grabbed your North Pole Credentials instead of your passport. While these documents are extremely similar, North Pole Credentials aren't issued by a country and therefore aren't actually valid documentation for travel in most of the world.
